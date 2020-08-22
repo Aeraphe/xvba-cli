@@ -1,6 +1,6 @@
 const { exec } = require("child_process");
 
-let testGitInstaled = (callBack) => {
+let testGitInstalled = (callBack) => {
     exec("git --version", (error, stdout, stderr) => {
         if (error) {
             console.log(`error: ${error.message}`);
@@ -16,4 +16,4 @@ let testGitInstaled = (callBack) => {
 }
 
 
-module.exports = testGitInstaled;
+module.exports = testGitInstalled;
