@@ -4,15 +4,12 @@
 program = require('commander');
 
 const fs = require("fs");
-
-var GitHub = require('github-api');
 const { stdout, stderr } = require('process');
 const testUrl = require('./testUrl');
 const getGitUrlParams = require("./getGitUrlParams");
 const testGitInstalled = require("./testGitInstalled");
 const gitClone = require('./gitClone');
 
-var gh = new GitHub();
 
 program
     .command('user [xvba]')
