@@ -2,7 +2,7 @@
 
 
 program = require('commander');
-const config = require('./config.json');
+
 const fs = require("fs");
 
 var GitHub = require('github-api');
@@ -27,6 +27,8 @@ program
     .command('add [xvba]')
     .description('Adiciona um to-do')
     .action((url) => {
+        const config = require(__dirname + "/config.json");
+
         let isValidUrl = testUrl(url)
         if (isValidUrl) {
             [user, package] = getGitUrlParams(url);
@@ -37,6 +39,7 @@ program
             if (gitInstalled) {
                 gitClone(program.package, [user, package], (cloned) => {
                     if (cloned) {
+
                         //Update config.json
                         let findPackage = config.xvba_packages.find(value => ((value.owner === user, value.package === package)));
                         if (findPackage === undefined) {
@@ -62,6 +65,7 @@ program
     .action((packId) => {
 
         try {
+            const config = require(__dirname + "/config.json");
             let findPackage = config.xvba_packages.find(value => ((value.packId == parseInt(packId))));
             if (findPackage) {
                 let pk = config.xvba_packages.filter(value => {
@@ -109,7 +113,15 @@ program
                 xvba_packages: [],
                 xvba_dev_packages: [],
             }
-            createConfigFile(data);
+            let confFile = __dirname + "/config.json";
+            fs.exists(confFile, hasFile => {
+                if (!hasFile) {
+                    createConfigFile(data);
+                } else {
+                    console.log("File alredy exist!!")
+                }
+            })
+
         } catch (error) {
             console.log(error)
         }
@@ -117,9 +129,37 @@ program
     });
 
 const createConfigFile = (data) => {
+    let confFile = __dirname + "/config.json";
 
-    fs.writeFile("./config.json", JSON.stringify(data, null, 4), () => {
-
+    fs.writeFile(confFile, JSON.stringify(data, null, 4), () => {
+        console.log(confFile)
     })
+
 }
+
+
+
+program
+    .command('ls [xvba]')
+    .description('Create a new config files')
+    .action(() => {
+
+        try {
+
+            let confFile = __dirname + "/config.json";
+            const config = require(confFile);
+            fs.exists(confFile, hasFile => {
+                if (!hasFile) {
+                    console.log("File not exists!!!")
+                } else {
+                    console.log(JSON.stringify(config,null,4))
+                }
+            })
+
+        } catch (error) {
+            console.log(error)
+        }
+
+    });
+
 program.option('--package <type>').parse(process.argv);
