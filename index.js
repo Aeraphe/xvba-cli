@@ -41,7 +41,7 @@ program
                         let findPackage = config.xvba_packages.find(value => ((value.owner === user, value.package === package)));
                         if (findPackage === undefined) {
                             let packId = Math.round(Math.random() * 1000, 4);
-                            config.xvba_packages.push({  packId, owner: user, package: package, version: 1 })
+                            config.xvba_packages.push({ packId, owner: user, package: package, version: 1 })
                             createConfigFile(config);
                         }
 
@@ -56,7 +56,41 @@ program
 
     });
 
+program
+    .command('del [xvba]')
+    .description('Delete Package')
+    .action((packId) => {
 
+        try {
+            let findPackage = config.xvba_packages.find(value => ((value.packId == parseInt(packId))));
+            if (findPackage) {
+                let pk = config.xvba_packages.filter(value => {
+                    if (value.packId !== parseInt(packId)) {
+                        return true
+                    } else { return false }
+                })
+                deletePackage(findPackage.package);
+                let newConf = { ...config, xvba_packages: pk }
+                createConfigFile(newConf);
+                console.log("Package  deleted: ", findPackage)
+            } else {
+                console.log("Package " + packId + " not found")
+            }
+        } catch (error) {
+            console.log(error)
+        }
+
+    });
+
+const deletePackage = (package) => {
+    let dir = repoFolder = __dirname + "/xvba_modules/" + package;
+    fs.rmdir(dir, { recursive: true }, (err) => {
+        if (err) {
+            throw err;
+        }
+
+    });
+}
 
 program
     .command('init [xvba]')
