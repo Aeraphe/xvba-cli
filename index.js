@@ -1,58 +1,58 @@
 #!/usr/bin/env node
 
 
-program = require('commander');
-
+const program = require('commander');
 const fs = require("fs");
+const path = require("path");
 const { stdout, stderr } = require('process');
 const testUrl = require('./testUrl');
 const getGitUrlParams = require("./getGitUrlParams");
 const testGitInstalled = require("./testGitInstalled");
 const gitClone = require('./gitClone');
+const rootPath = process.cwd();
 
 
-program
-    .command('user [xvba]')
-    .description('Adiciona um to-do')
-    .action(
-        () => {
-            console.log(gh.getRepo("aeraphe", "xvba-cli"))
-        }
-    );
 
 program
     .command('add [xvba]')
     .description('Adiciona um to-do')
     .action((url) => {
-        const config = require(__dirname + "/config.json");
 
-        let isValidUrl = testUrl(url)
-        if (isValidUrl) {
-            [user, package] = getGitUrlParams(url);
-        }
-        //Git was installed 
-        testGitInstalled(gitInstalled => {
-            //if true clone the repository
-            if (gitInstalled) {
-                gitClone(program.package, [user, package], (cloned) => {
-                    if (cloned) {
+        try {
+            if (!checkRootFolder()) { return; };
+            const config = require(rootPath + "/config.json");
 
-                        //Update config.json
-                        let findPackage = config.xvba_packages.find(value => ((value.owner === user, value.package === package)));
-                        if (findPackage === undefined) {
-                            let packId = Math.round(Math.random() * 1000, 4);
-                            config.xvba_packages.push({ packId, owner: user, package: package, version: 1 })
-                            createConfigFile(config);
+            let isValidUrl = testUrl(url)
+            if (isValidUrl) {
+                [user, package] = getGitUrlParams(url);
+            }
+            //Git was installed 
+            testGitInstalled(gitInstalled => {
+                //if true clone the repository
+                if (gitInstalled) {
+                    gitClone(program.package, [user, package], (cloned) => {
+                        if (cloned) {
+
+                            //Update config.json
+                            let findPackage = config.xvba_packages.find(value => ((value.owner === user, value.package === package)));
+                            if (findPackage === undefined) {
+                                let packId = Math.round(Math.random() * 1000, 4);
+                                config.xvba_packages.push({ packId, owner: user, package: package, version: 1 })
+                                createConfigFile(config);
+                            }
+
                         }
 
-                    }
-
-                })
-            }
+                    })
+                }
 
 
 
-        })
+            })
+        } catch (error) {
+
+        }
+
 
     });
 
@@ -62,7 +62,8 @@ program
     .action((packId) => {
 
         try {
-            const config = require(__dirname + "/config.json");
+            if (!checkRootFolder()) { return; };
+            const config = require(rootPath + "/config.json");
             let findPackage = config.xvba_packages.find(value => ((value.packId == parseInt(packId))));
             if (findPackage) {
                 let pk = config.xvba_packages.filter(value => {
@@ -70,7 +71,11 @@ program
                         return true
                     } else { return false }
                 })
-                deletePackage(findPackage.package);
+            
+
+                const dir = repoFolder = path.join(rootPath + "/xvba_modules/" + findPackage.package);
+                removeDir(dir)
+
                 let newConf = { ...config, xvba_packages: pk }
                 createConfigFile(newConf);
                 console.log("Package  deleted: ", findPackage)
@@ -83,15 +88,6 @@ program
 
     });
 
-const deletePackage = (package) => {
-    let dir = repoFolder = __dirname + "/xvba_modules/" + package;
-    fs.rmdir(dir, { recursive: true }, (err) => {
-        if (err) {
-            throw err;
-        }
-
-    });
-}
 
 program
     .command('init [xvba]')
@@ -99,6 +95,7 @@ program
     .action(() => {
 
         try {
+            if (!checkRootFolder()) { return; };
             data = {
                 app_name: "XVBA",
                 description: "",
@@ -110,7 +107,7 @@ program
                 xvba_packages: [],
                 xvba_dev_packages: [],
             }
-            let confFile = __dirname + "/config.json";
+            let confFile = rootPath + "/config.json";
             fs.exists(confFile, hasFile => {
                 if (!hasFile) {
                     createConfigFile(data);
@@ -126,10 +123,10 @@ program
     });
 
 const createConfigFile = (data) => {
-    let confFile = __dirname + "/config.json";
-
+    if (!checkRootFolder()) { return; };
+    let confFile = rootPath + "/config.json";
     fs.writeFile(confFile, JSON.stringify(data, null, 4), () => {
-        console.log(confFile)
+        console.log(data)
     })
 
 }
@@ -142,21 +139,73 @@ program
     .action(() => {
 
         try {
-
-            let confFile = __dirname + "/config.json";
+            let confFile = path.join(rootPath + "/config.json");
+            if (!checkRootFolder()) {
+                return;
+            };
             const config = require(confFile);
-            fs.exists(confFile, hasFile => {
-                if (!hasFile) {
-                    console.log("File not exists!!!")
-                } else {
-                    console.log(JSON.stringify(config,null,4))
-                }
-            })
+            console.log(config)
 
         } catch (error) {
             console.log(error)
         }
 
     });
+
+
+const checkRootFolder = () => {
+    let confFile = rootPath + "/config.json";
+    try {
+        let find = fs.existsSync(confFile);
+
+        if (!find) {
+            console.error("You are not in project root folder");
+            return false;
+        } else {
+
+            return true;
+        }
+
+    } catch (error) {
+        return false;
+    }
+
+
+}
+
+
+
+
+
+
+
+const removeDir = function (path) {
+    if (fs.existsSync(path)) {
+        const files = fs.readdirSync(path)
+
+        if (files.length > 0) {
+            files.forEach(function (filename) {
+                if (fs.statSync(path + "/" + filename).isDirectory()) {
+                    removeDir(path + "/" + filename)
+                } else {
+                    fs.unlinkSync(path + "/" + filename)
+                }
+            })
+            fs.rmdirSync(path)
+        } else {
+            fs.rmdirSync(path)
+        }
+    } else {
+        console.log("Directory path not found.")
+    }
+}
+
+
+
+
+
+
+
+
 
 program.option('--package <type>').parse(process.argv);
