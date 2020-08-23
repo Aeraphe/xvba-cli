@@ -36,8 +36,7 @@ program
                             //Update config.json
                             let findPackage = config.xvba_packages.find(value => ((value.owner === user, value.package === package)));
                             if (findPackage === undefined) {
-                                let packId = Math.round(Math.random() * 1000, 4);
-                                config.xvba_packages.push({ packId, owner: user, package: package, version: 1 })
+                                config.xvba_packages.push({ owner: user, package: package, version: 1 })
                                 createConfigFile(config);
                             }
 
@@ -64,24 +63,46 @@ program
         try {
             if (!checkRootFolder()) { return; };
             const config = require(rootPath + "/config.json");
-            let findPackage = config.xvba_packages.find(value => ((value.packId == parseInt(packId))));
-            if (findPackage) {
-                let pk = config.xvba_packages.filter(value => {
-                    if (value.packId !== parseInt(packId)) {
-                        return true
-                    } else { return false }
-                })
-            
+            let findPackage = null;
+            let pk = null;
 
+            if (program.n) {
+                findPackage = config.xvba_packages.filter((value) => value.package == packId);
+                if (findPackage && findPackage.length === 0) {
+                    pk = config.xvba_packages.filter((value, index) => {
+                        if (value.package !== packId) {
+                            return true
+                        } else { return false }
+                    })
+
+                }
+
+            } else {
+
+
+                console.log(packId)
+                findPackage = config.xvba_packages[parseInt(packId)];
+
+                if (findPackage) {
+                    pk = config.xvba_packages.filter((value, index) => {
+                        if (index !== parseInt(packId)) {
+                            return true
+                        } else { return false }
+                    })
+                }
+
+            }
+            if (findPackage) {
                 const dir = repoFolder = path.join(rootPath + "/xvba_modules/" + findPackage.package);
                 removeDir(dir)
-
-                let newConf = { ...config, xvba_packages: pk }
+                let newConf = { ...config, xvba_packages: pk == null ? [] : pk }
                 createConfigFile(newConf);
                 console.log("Package  deleted: ", findPackage)
             } else {
                 console.log("Package " + packId + " not found")
             }
+
+
         } catch (error) {
             console.log(error)
         }
@@ -135,7 +156,7 @@ const createConfigFile = (data) => {
 
 program
     .command('ls [xvba]')
-    .description('Create a new config files')
+    .description('Lista all Packages')
     .action(() => {
 
         try {
@@ -144,7 +165,18 @@ program
                 return;
             };
             const config = require(confFile);
-            console.log(config)
+            let printPackages = [];
+            if (config.xvba_packages.length > 0) {
+                config.xvba_packages.forEach((value, index) => {
+                    printPackages.push({ item: index, ...value })
+                })
+
+                console.log(JSON.stringify(printPackages, null, 4));
+                return;
+            }
+            console.log("No Packages Installed!!!");
+
+
 
         } catch (error) {
             console.log(error)
@@ -208,4 +240,4 @@ const removeDir = function (path) {
 
 
 
-program.option('--package <type>').parse(process.argv);
+program.option('--package ,--n').parse(process.argv);
