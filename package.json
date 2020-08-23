@@ -1,6 +1,6 @@
 {
-  "name": "xvba-cli",
-  "version": "1.0.0",
+  "name": "@localsmart/xvba-cli",
+  "version": "1.0.0a",
   "description": "Command Line for XVBA",
   "main": "index.js",
   "bin": {
@@ -9,8 +9,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Alberto Eduardo de Castro Oliveira",
+  "author": "aeraphe",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aeraphe/xvba-cli.git"
+  },
   "dependencies": {
     "axios": "^0.20.0",
     "chalk": "^2.4.2",
@@ -19,5 +23,10 @@
     "figlet": "^1.2.1",
     "inquirer": "^6.2.2",
     "shelljs": "^0.8.3"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/Aeraphe/xvba-cli/issues"
+  },
+  "homepage": "https://github.com/Aeraphe/xvba-cli#readme",
+  "devDependencies": {}
 }
