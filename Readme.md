@@ -12,7 +12,6 @@
 
 ```
 npx xvba add https://github.com/Aeraphe/xvba_gaus.git
-
 ```
 
 ### List Package
@@ -21,7 +20,6 @@ npx xvba add https://github.com/Aeraphe/xvba_gaus.git
 
 ```
 npx xvba ls
-
 ```
 
 ### Delete Package (2 ways)
@@ -30,12 +28,10 @@ npx xvba ls
 
 ```
 npx xvba del :item (Replace :item for the package item number)
-
 ```
 
 or
 
 ```
 npx xvba del --n :packageName (Replace :packageName for the package name)
-
 ```
