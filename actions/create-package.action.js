@@ -7,13 +7,13 @@ const path = require('path')
 module.exports = async function createPackageScaffold(package) {
     try {
         const xvbaModulesPath = path.join(rootPath, 'xvba_modules', package);
-
+        //Developer -> check if the folder has already a folder with the same name
         await handleCheckFolder(xvbaModulesPath);
 
 
         await new Promise(
             (resolve, reject) => {
-                fs.writeFile(path.join(xvbaModulesPath, 'Readme.md'), README(package), (error => {
+                fs.writeFile(path.join(xvbaModulesPath, 'README.md'), README(package), (error => {
                     error ? reject(error) : resolve(true)
                 }))
             }
@@ -22,6 +22,13 @@ module.exports = async function createPackageScaffold(package) {
         await new Promise(
             (resolve, reject) => {
                 fs.writeFile(path.join(xvbaModulesPath, 'xvba.package.json'), JSON.stringify(XVBA_PACKAGE(package), undefined, 2), (error => {
+                    error ? reject(error) : resolve(true)
+                }))
+            }
+        )
+        await new Promise(
+            (resolve, reject) => {
+                fs.writeFile(path.join(xvbaModulesPath, 'CHANGELOG.md'), CHANGE_LOG(package), (error => {
                     error ? reject(error) : resolve(true)
                 }))
             }
@@ -85,4 +92,25 @@ const XVBA_PACKAGE = (package) => {
         "dev_dependencies": {},
         "homepage": "https://github.com/Aeraphe/xvba-cli"
     }
+}
+
+
+const CHANGE_LOG = (package) => {
+    return `# Changelog
+
+    ## ${package} (Under Construction)
+    
+    - This package provides a way to add VBA packages in Excel with XVBA VSCode extension
+    - Add third packages to your project with command line interface
+    
+    
+    
+    ## [1.0.0b3] - 2020-09-16
+    ### Added
+    - New Command Build XVBA Package "npm xvba build [package]"
+    - New Command Create XVBA Package "npm xvba create [package]"
+    
+    ### Fixed
+    - Refectory all code
+    `
 }
