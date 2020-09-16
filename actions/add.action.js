@@ -3,6 +3,7 @@ const testUrl = require('../testUrl');
 const getGitUrlParams = require("../getGitUrlParams");
 const testGitInstalled = require("../testGitInstalled");
 const gitClone = require('../gitClone');
+const checkRootFolder =  require('../helper/check-root-folder.helper')
 const rootPath = process.cwd();
 
 module.exports = function Add(url) {
