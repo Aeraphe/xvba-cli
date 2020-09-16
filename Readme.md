@@ -62,3 +62,25 @@ npx xvba del --n :packageName (Replace :packageName for the package name)
    <p>
  <img src="https://github.com/aeraphe/images-xvb/raw/master/images/xvba_del.gif" alt="Delete Packages">
 </p>
+
+
+### Create Your Own Package and publish on Xvba Repository
+
+<p> For Build use the command: (replace the [package] for your package name/folder ) </p>
+
+```
+npx xvba create [package]
+
+```
+
+This command will create a folder and files on xvba_modules with [package] name
+
+
+### Build Your Own Package and publish on Xvba Repository
+
+<p> For Build use the command: (replace the [package] for your package name/folder ) </p>
+
+```
+npx xvba build [package]
+
+```
