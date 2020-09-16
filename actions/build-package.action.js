@@ -2,28 +2,53 @@ const archiver = require('archiver')
 const checkRootFolder = require('../helper/check-root-folder.helper')
 const rootPath = process.cwd();
 const path = require('path')
-const fs = require('fs')
+const fs = require('fs');
+const { promises, resolveSoa } = require('dns');
 
 module.exports = async function buildPackage(package) {
     try {
         if (!checkRootFolder()) { return; };
         const packagePath = path.join(rootPath, "xvba_modules", package);
-        console.log(packagePath)
-        //Check if package has xvba.extension.json
-        //Check .xvba_ignore files
-        //Read file version on xvba.extension.json 
-        //Compact file in xvba and version
-        //Check folder exist
+
+        // Developes  -->>Check .xvba_ignore files
+
+
+        //Check package folder exist
         const checkFolder = await handleCheckFolder(packagePath)
-        const checkPackageFile = await handleCheckFile(path.join(packagePath,'xvba.package.json'))
+        //Check if package has xvba.package.json
+        const checkPackageFile = await handleCheckFile(path.join(packagePath, 'xvba.package.json'))
         if (checkFolder && checkPackageFile) {
-            createZip(packagePath, package)
+            //Read file version on xvba.package.json 
+            const config = await readPackageConfigFile(packagePath)
+
+            //Develope - > check package name especial characters
+
+            //Check version exists
+            const version = config.version ? config.version : '1.0'
+            //Compact file in xvba and version
+            createZip(packagePath, package, version)
         }
 
     } catch (error) {
         console.log(error)
     }
 
+
+}
+
+const readPackageConfigFile = async (packagePath) => {
+    return new Promise(
+        (resolve, reject) => {
+            fs.readFile(path.join(packagePath, 'xvba.package.json'), (error, data) => {
+                if (error) {
+                    reject(error)
+                } else {
+                    resolve(JSON.parse(data))
+                }
+
+            })
+        }
+    )
 
 }
 
@@ -51,9 +76,11 @@ const handleCheckFile = async (filePath) => {
     })
 }
 
-const createZip = (packagePath, package) => {
 
-    const output = fs.createWriteStream(path.join(rootPath, package + '.zip'));
+
+const createZip = (packagePath, package, version) => {
+
+    const output = fs.createWriteStream(path.join(rootPath, package + '-' + version + '.xvba'));
     const archive = archiver('zip', { zlib: { level: 9 } })
     // listen for all archive data to be written
     // 'close' event is fired only when a file descriptor is involved
