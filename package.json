@@ -1,6 +1,6 @@
 {
   "name": "@localsmart/xvba-cli",
-  "version": "1.0.0b1",
+  "version": "1.0.0b2",
   "description": "Command Line for XVBA",
   "main": "index.js",
   "bin": {
@@ -16,6 +16,7 @@
     "url": "git+https://github.com/Aeraphe/xvba-cli.git"
   },
   "dependencies": {
+    "archiver": "^5.0.2",
     "axios": "^0.20.0",
     "chalk": "^2.4.2",
     "cli-table": "^0.3.1",
