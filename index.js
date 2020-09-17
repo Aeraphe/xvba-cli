@@ -7,10 +7,11 @@ const delPackage = require('./actions/del-package.action')
 const buildPackage = require('./actions/build-package.action')
 const listPackages = require('./actions/list-packages.action')
 const createPackageScaffold = require('./actions/create-package.action');
+const installPackage = require('./actions/install.action')
 
 program.command('add [xvba]').description('Add XVB Package fro GitHub').action((url) => { addXvbaFromGit(url); });
 
-program.command('install [xvba]').description('Instal Xvba Package from Xvba Repository').action((package) => { buildPackage(package) })
+program.command('install [xvba]').description('Instal Xvba Package from Xvba Repository').action((package) => { installPackage(package) })
 
 program.command('i [xvba]').description('Instal Xvba Package from Xvba Repository').action((package) => { buildPackage(package) })
 
