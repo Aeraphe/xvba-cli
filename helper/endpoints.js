@@ -5,8 +5,8 @@ const url = baseUrl + apiVersion;
 /**
  * Global Api Endpoints Manager
  */
-export const packages = {
-   
+module.exports.packages = {
+
     getFile: url + 'packages/download/'
 }
 
