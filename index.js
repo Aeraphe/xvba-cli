@@ -10,10 +10,9 @@ const createPackageScaffold = require('./actions/create-package.action');
 const installPackage = require('./actions/install.action')
 
 
-
+//Install
 program.command('install [xvba]').description('Instal Xvba Package from Xvba Repository').action((package) => { installPackage(package) })
-
-program.command('i [xvba]').description('Instal Xvba Package from Xvba Repository').action((package) => { buildPackage(package) })
+program.command('i [xvba]').description('Instal Xvba Package from Xvba Repository').action((package) => { installPackage(package) })
 
 
 program.command('create [xvba]').description('Create Xvba Package scaffold on xvba_modules').action((package) => { createPackageScaffold(package) })
