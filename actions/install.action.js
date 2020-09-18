@@ -9,7 +9,9 @@ const { promisify } = require('util');
 const readFileAsync = promisify(Fs.readFile);
 const mkdirAsync = promisify(Fs.mkdir);
 const statAsync = promisify(Fs.stat);
-const checkRootFolder =  require('../helper/check-root-folder.helper')
+const checkRootFolder = require('../helper/check-root-folder.helper')
+const createConfigFile = require('../helper/create-config-file.helper');
+
 
 
 
@@ -17,6 +19,8 @@ module.exports = async (package) => {
     try {
 
         if (!checkRootFolder()) { return; };
+        const projectConfig = require(rootPath + "/config.json");
+
         const twirlTimer = (function () {
             let P = ["\\", "|", "/", "-"];
             let x = 0;
@@ -25,7 +29,7 @@ module.exports = async (package) => {
                 x &= 3;
             }, 50);
         })();
- 
+
         const url = urls.packages.getFile + package;
         //Get temp dir 
         const tempDir = os.tmpdir()
@@ -51,9 +55,12 @@ module.exports = async (package) => {
         const packageFolder = path.join(rootPath, 'xvba_modules', config.package);
         //Save package to xvba_modules folder
         await extract(path.join(xvbaModulesTempFolder, 'package.xvba'), { dir: packageFolder });
+        //Update config package
+        let updatedProjectConfig = { ...projectConfig, xvba_packages: { ...projectConfig.xvba_packages, [config.package]: config.version } };
+        createConfigFile(updatedProjectConfig);
 
         console.log('Package ' + config.package + ' has Successfully installed ')
-        console.log('\nThanks for using XVBA')
+        console.log('\nThanks for using XVBA\n')
         twirlTimer.unref()
 
     } catch (error) {
