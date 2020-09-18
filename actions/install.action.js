@@ -64,7 +64,9 @@ module.exports = async (package) => {
         twirlTimer.unref()
 
     } catch (error) {
+        twirlTimer.unref()
         console.log(error)
+       
     }
 
     //Unzip file
