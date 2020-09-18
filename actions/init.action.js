@@ -14,8 +14,8 @@ module.exports = () => {
             create_ate: "",
             excel_file: "index.xlsb",
             vba_folder: "vba-files",
-            xvba_packages: [],
-            xvba_dev_packages: [],
+            xvba_packages: {},
+            xvba_dev_packages: {},
         }
         let confFile = rootPath + "/config.json";
         fs.exists(confFile, hasFile => {
