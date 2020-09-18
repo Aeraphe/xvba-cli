@@ -57,7 +57,7 @@ module.exports = async (package) => {
         await extract(path.join(xvbaModulesTempFolder, 'package.xvba'), { dir: packageFolder });
         //Update config package
         let updatedProjectConfig = { ...projectConfig, xvba_packages: { ...projectConfig.xvba_packages, [config.package]: config.version } };
-        createConfigFile(updatedProjectConfig);
+        await createConfigFile(updatedProjectConfig);
 
         console.log('Package ' + config.package + ' has Successfully installed ')
         console.log('\nThanks for using XVBA\n')
