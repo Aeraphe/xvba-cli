@@ -2,9 +2,11 @@
 
 ## Command Line Interface for XVBA VSCode extension (Under Construction)
 
-- This package provides a way to add VBA packages in Excel with XVBA VSCode extension
-- Add third packages to your project with command line interface
+- This package provides a way to instal VBA packages in Excel with XVBA VSCode extension
+
+- Install packages to your project with command line interface
 - <b>Create/Build</b> a a VBA package and publish on XVBA repository
+
 
 ## Install
 
@@ -20,17 +22,14 @@
 
 ## List of Commands
 
-### Add Package
+### Install Package
 
-- For add new packages use the command (xvba_gaus package example)
+- For install new packages use the command 
 
 ```
-npx xvba add https://github.com/Aeraphe/xvba_gaus.git
+npx xvba install [package]
 ```
 
-   <p>
- <img src="https://github.com/aeraphe/images-xvb/raw/master/images/xvba_add.gif" alt="Add Packages">
-</p>
 
 ### List Package
 
@@ -44,29 +43,22 @@ npx xvba ls
  <img src="https://github.com/aeraphe/images-xvb/raw/master/images/xvba_ls.gif" alt="List Packages">
 </p>
 
-### Delete Package (2 ways)
+### Uninstall Package 
 
-- For delete packages use the command
-
-```
-npx xvba del :item (Replace :item for the package item number)
-```
-
-or
+- For uninstall packages use the command
 
 ```
-npx xvba del --n :packageName (Replace :packageName for the package name)
+npx xvba uninstall [package]
 ```
 
-   <p>
- <img src="https://github.com/aeraphe/images-xvb/raw/master/images/xvba_del.gif" alt="Delete Packages">
-</p>
 
-### Create Your Own Package and publish on Xvba Repository
+
+### Create a XVBA package
 
 <p> For Create use the command: (replace the [package] for your package name/folder ) </p>
 
-This command will create a folder and files on xvba_modules with [package] name
+This command will create a folder and files (on xvba_modules) for you start to create your own package
+
 
 ```
 npx xvba create [package]

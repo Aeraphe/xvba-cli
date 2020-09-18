@@ -14,3 +14,13 @@
 
 ### Fixed
 - Refectory all code
+
+## [1.0.0b4] - 2020-09-18
+### Added
+- New Command Install XVBA Package "npm xvba install [package]"
+
+### Delete
+-- Remove Action Add package from git
+
+### Change
+-- Change packages params type array to object
