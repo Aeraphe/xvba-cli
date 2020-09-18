@@ -5,7 +5,7 @@ const writeFileAsync = promisify(fs.writeFile)
 
 const rootPath = process.cwd();
 
-module.exports = createConfigFile = async (data) => {
+module.exports = async (data) => {
     if (!checkRootFolder()) { return; };
     let confFile = rootPath + "/config.json";
     await writeFileAsync(confFile, JSON.stringify(data, null, 4), () => {})
