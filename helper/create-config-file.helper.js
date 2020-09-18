@@ -1,13 +1,13 @@
 const fs = require("fs");
 const checkRootFolder = require('../helper/check-root-folder.helper');
+const { promisify } = require('util');
+const writeFileAsync = promisify(fs.writeFile)
 
 const rootPath = process.cwd();
 
-module.exports =  createConfigFile = (data) => {
+module.exports = createConfigFile = async (data) => {
     if (!checkRootFolder()) { return; };
     let confFile = rootPath + "/config.json";
-    fs.writeFile(confFile, JSON.stringify(data, null, 4), () => {
-        console.log(data)
-    })
+    await writeFileAsync(confFile, JSON.stringify(data, null, 4), () => {})
 
 }
