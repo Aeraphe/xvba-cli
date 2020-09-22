@@ -24,6 +24,8 @@ module.exports = async function addVbaFile(filePath, program) {
 
             }
 
+        } else {
+            fileName = filePath;
         }
 
         if (program.class) {
