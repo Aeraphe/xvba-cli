@@ -16,12 +16,13 @@ const createConfigFile = require('../helper/create-config-file.helper');
 
 
 module.exports = async (package) => {
+    let twirlTimer;
     try {
 
         if (!checkRootFolder()) { return; };
         const projectConfig = require(rootPath + "/config.json");
 
-        const twirlTimer = (function () {
+         twirlTimer = (function () {
             let P = ["\\", "|", "/", "-"];
             let x = 0;
             return setInterval(function () {
