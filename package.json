@@ -1,6 +1,6 @@
 {
   "name": "@localsmart/xvba-cli",
-  "version": "1.0.0b6",
+  "version": "1.0.0b7",
   "description": "Command Line for XVBA",
   "main": "index.js",
   "bin": {
