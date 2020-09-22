@@ -73,3 +73,14 @@ npx xvba create [package]
 npx xvba build [package]
 
 ```
+
+### Add VBA files to Your Project
+
+<p> For Build use the command: (replace the [filename] for your package name/filename ) </p>
+
+```
+npx xvba add -c [filename] //For classes
+
+npx xvba add -m [filename] //For Modules
+
+```
