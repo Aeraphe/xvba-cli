@@ -75,8 +75,7 @@ handleCheckFolder = (packagePath) => {
 }
 
 
-function jsUcfirst(string) 
-{
+function jsUcfirst(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
@@ -84,17 +83,18 @@ function jsUcfirst(string)
  * 
  * @param {String} package 
  */
-const INDEX_CLASS = (package) =>{
+const INDEX_CLASS = (package) => {
     const name = jsUcfirst(package);
-    return `VERSION 1.0 CLASS
-    BEGIN
-      MultiUse = -1  'True
-    END
-    Attribute VB_Name = "${name}"
-    Attribute VB_GlobalNameSpace = False
-    Attribute VB_Creatable = False
-    Attribute VB_PredeclaredId = False
-    Attribute VB_Exposed = False
+
+    const classExample = `VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = "${name}"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
 
 'namespace=xvba_modules\\${package}
 
@@ -109,24 +109,30 @@ Private pName As String
 'Main method example
 Private Sub main()
 
-  MsgBox "message",,"title"
+MsgBox "message",,"title"
 
 End Sub
 
 
 'Example of accessor method Get
 Public Property Get Name() As String
-  Name = pName
+Name = pName
 End Property
 
 
 'Example of accessor method Let
 Public Property Let Name(Value as String) As String
-  pName =  Value
+pName =  Value
 End Property
 
-    `
+`
+    re1 = new RegExp("\x0A", 'g');
+    origContent = classExample.replace(re1, "\x0D\x0A");
+    return origContent
 }
+
+
+
 
 const README = (package) => {
     return `# ${package} (Example of Readme File)
