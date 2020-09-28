@@ -3,6 +3,7 @@
 ## Command Line Interface for XVBA VSCode extension (Under Construction)
 
 - This package provides a way to instal VBA packages in Excel with XVBA VSCode extension
+- For mo details see: <a href="https://www.xvba.dev">www.xvba.dev</a>
 
 - Install packages to your project with command line interface
 - <b>Create/Build</b> a a VBA package and publish on XVBA repository

@@ -29,3 +29,7 @@
 ### Added
 - New Command Add VBA class file "xvba  add -c [filename]"  or "xvba  add -c [subfolder/filename]"
 - New Command Add VBA Module file "xvba  add -m [filename]" or "xvba  add -m [subfolder/filename]"
+
+## [1.0.0b7] - 2020-09-28
+### Fix
+- Change file write class example with LF to CRLF
