@@ -116,13 +116,13 @@ End Sub
 
 'Example of accessor method Get
 Public Property Get Name() As String
-Name = pName
+ Name = pName
 End Property
 
 
 'Example of accessor method Let
-Public Property Let Name(Value as String) As String
-pName =  Value
+Public Property Let Name(Value as String)
+ pName =  Value
 End Property
 
 `
