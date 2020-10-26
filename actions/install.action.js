@@ -37,9 +37,8 @@ module.exports = async (package) => {
         const filePath = path.resolve(tempDir, 'xvba-modules', 'package.xvba')
         const xvbaModulesTempFolder = path.join(tempDir, 'xvba-modules')
         //Check temp folder exists
-        const stats = await statAsync(xvbaModulesTempFolder)
-        if (!stats.isDirectory) {
-            await mkdirAsync(xvbaModulesTempFolder)
+        if(!Fs.existsSync(xvbaModulesTempFolder)){
+         await mkdirAsync(xvbaModulesTempFolder)
         }
         //Read file from Http request
         const writer = Fs.createWriteStream(filePath);
@@ -66,7 +65,7 @@ module.exports = async (package) => {
 
     } catch (error) {
         twirlTimer.unref()
-        console.log(error)
+        console.log("Error on Install Package. File no exists")
        
     }
 
