@@ -1,13 +1,19 @@
 # XVBA-CLI
 
-## Command Line Interface for XVBA VSCode extension (Under Construction)
+## Command Line Interface for XVBA VSCode extension (Under Construction "b" Version)
 
 - This package provides a way to instal VBA packages in Excel with XVBA VSCode extension
-- For mo details see: <a href="https://www.xvba.dev">www.xvba.dev</a>
-
+- For more details see: <a href="https://www.xvba.dev">www.xvba.dev</a>
 - Install packages to your project with command line interface
-- <b>Create/Build</b> a a VBA package and publish on XVBA repository
+- <b>Create/Build</b> a VBA package and publish on XVBA repository
 
+## Feedback
+- All feedback are welcome
+- Mail : alberto.aeraph@gmail.com 
+- WhatsApp: +55 31 9 9229 5626 
+
+- Also please write a review, star me on GitHub, and follow me on github
+  - Github account: <a href="https://github.com/Aeraphe">Aeraphe</a>
 
 ## Install
 
@@ -27,10 +33,16 @@
 
 - For install new packages use the command 
 
+
 ```
 npx xvba install [package]
 ```
 
+- Example: Instal excel-types package for xvba auto-complete
+
+```
+npx xvba install excel-types
+```
 
 ### List Package
 
