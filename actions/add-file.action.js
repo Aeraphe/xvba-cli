@@ -87,14 +87,21 @@ handleCheckFolder = async (packagePath) => {
 
 const MODULE = (fileName, folder) => {
 
-    return `Attribute VB_Name = "${fileName}"
+ let fileContent =`Attribute VB_Name = "${fileName}"
 
-'namespace=vba-files${folder.replace(/\//g, "\\")}
-
-Public Sub ${fileName}()
+    'namespace=vba-files${folder.replace(/\//g, "\\")}
     
-End Sub
+    '/*
+    '
+    'This Function ..
+    '
+    '@return {}
+    '*/
+    Public Sub main()
+        
+    End Sub
     `
+    return  fileContent.replace(/\n/g, "\r");
 
 }
 
@@ -118,28 +125,40 @@ Attribute VB_Exposed = False
 'namespace=vba-files${folder.replace(/\//g, "\\")}
 
 
+'/*
+' Block comment for class
+' This Class is...
+'
+'*/
 
-'Example of Class Create by XVBA-CLI
 
-'Class Param Example
+'/*
+'Class Param Example'
+'*/
 Private pName As String
 
 
+'/*
+'
 'Main method example
+'
+'*/
 Private Sub main()
 
 MsgBox "message",,"title"
 
 End Sub
 
-
+'/*
 'Example of accessor method Get
+'*/
 Public Property Get Name() As String
  Name = pName
 End Property
 
-
+'/*
 'Example of accessor method Let
+'*/
 Public Property Let Name(Value as String)
  pName =  Value
 End Property
