@@ -3,15 +3,12 @@ const Fs = require('fs');
 const urls = require('../helper/endpoints')
 const os = require('os')
 const path = require('path')
-const extract = require('extract-zip')
 const rootPath = process.cwd();
 const { promisify } = require('util');
-const readFileAsync = promisify(Fs.readFile);
 const mkdirAsync = promisify(Fs.mkdir);
-const statAsync = promisify(Fs.stat);
 const checkRootFolder = require('../helper/check-root-folder.helper')
 const createConfigFile = require('../helper/create-config-file.helper');
-
+const AdmZip = require('adm-zip');
 
 
 
@@ -22,7 +19,7 @@ module.exports = async (package) => {
         if (!checkRootFolder()) { return; };
         const projectConfig = require(rootPath + "/config.json");
 
-         twirlTimer = (function () {
+        twirlTimer = (function () {
             let P = ["\\", "|", "/", "-"];
             let x = 0;
             return setInterval(function () {
@@ -37,8 +34,8 @@ module.exports = async (package) => {
         const filePath = path.resolve(tempDir, 'xvba-modules', 'package.xvba')
         const xvbaModulesTempFolder = path.join(tempDir, 'xvba-modules')
         //Check temp folder exists
-        if(!Fs.existsSync(xvbaModulesTempFolder)){
-         await mkdirAsync(xvbaModulesTempFolder)
+        if (!Fs.existsSync(xvbaModulesTempFolder)) {
+            await mkdirAsync(xvbaModulesTempFolder)
         }
         //Read file from Http request
         const writer = Fs.createWriteStream(filePath);
@@ -46,15 +43,25 @@ module.exports = async (package) => {
         response.data.pipe(writer);
         //Stream Complete
         await new Promise((resolve, reject) => { writer.on('finish', resolve); writer.on('close', reject); });
-        //Package temp folder
-        const packageTempfolder = path.join(xvbaModulesTempFolder, 'package');
+
         //Extract filet to temp folder
-        await extract(path.join(xvbaModulesTempFolder, 'package.xvba'), { dir: packageTempfolder });
+        var zip = new AdmZip(path.join(xvbaModulesTempFolder, 'package.xvba'));
+        const zipEntries = zip.getEntries();
+        //console.log(zipEntries.toString())
+
+        let config = "";
         //Reade config file
-        const config = await readFileAsync(path.join(packageTempfolder, 'xvba.package.json')).then(data => JSON.parse(data));
+        zipEntries.forEach(function (zipEntry) {
+
+            if (zipEntry.entryName == "xvba.package.json") {
+                config = JSON.parse(zipEntry.getData().toString('utf8'));
+            }
+        });
+
+
         const packageFolder = path.join(rootPath, 'xvba_modules', config.package);
         //Save package to xvba_modules folder
-        await extract(path.join(xvbaModulesTempFolder, 'package.xvba'), { dir: packageFolder });
+        zip.extractAllTo(packageFolder, /*overwrite*/true);
         //Update config package
         let updatedProjectConfig = { ...projectConfig, xvba_packages: { ...projectConfig.xvba_packages, [config.package]: config.version } };
         await createConfigFile(updatedProjectConfig);
@@ -65,11 +72,9 @@ module.exports = async (package) => {
 
     } catch (error) {
         twirlTimer.unref()
-        console.log("Error on Install Package. File no exists")
-       
+        console.log(error)
+
     }
 
-    //Unzip file
-    //Read json file
-    //Create folder with package name from json
+
 }
